@@ -1,7 +1,18 @@
-body {
-  padding-top: 5rem;
+.container-fluid{
+  width: 50% !important;
 }
-.starter-template {
-  padding: 3rem 1.5rem;
+body {
+  padding-top: 2rem;
+}
+.starter-template{
   text-align: center;
 }
+.head{
+  padding: 10px;
+  margin-bottom: 25px;
+  width: 100%;
+}
+.grey{
+  background-color: lightgrey;
+}
+

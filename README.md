@@ -1,3 +1,3 @@
 # WorkoutTracker
 
-This is an application, which will allow tracking workouts.
+A Personal Workout Tracker single page application, which will manage personal workout and fitness plans
