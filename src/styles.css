@@ -15,4 +15,13 @@ body {
 .grey{
   background-color: lightgrey;
 }
-
+h3{
+  text-align: left;
+}
+.navigator > div > a{
+  font-size: 20px;
+}
+.navigator{
+  margin-bottom: 25px;
+  margin-top: 25px;
+}

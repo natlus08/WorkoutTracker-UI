@@ -1,13 +1,30 @@
-viewworkouts works!
-<div class="row">
-  <div class="col-lg-3">
-    <a [routerLink] = "['/Edit']">Edit Workout</a>
-  </div>
-  <div class="col-lg-3">
-    <a [routerLink] = "['/Start']">Start Workout</a>
-  </div>
-  <div class="col-lg-3">
-    <a [routerLink] = "['/End']">End Workout</a>
+<div class="row" xmlns="http://www.w3.org/1999/html">
+  <div class="col-12">
+    <div class="input-group input-group-sm mb-3">
+      <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"  placeholder="Search...">
+    </div>
   </div>
 </div>
-
+<div class="view-record">
+  <div class="row">
+    <div class="col-12">
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" value="Workout-one" readonly>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-3">
+      <a class="btn btn-outline-dark btn-block" [routerLink] = "['/Edit']">Edit</a>
+    </div>
+    <div class="col-3">
+      <a class="btn btn-outline-dark btn-block">Delete</a>
+    </div>
+    <div class="col-3">
+      <a class="btn btn-outline-dark btn-block" [routerLink] = "['/Start']">Start</a>
+    </div>
+    <div class="col-3">
+      <a class="btn btn-outline-dark btn-block" [routerLink] = "['/End']">End</a>
+    </div>
+  </div>
+</div>
