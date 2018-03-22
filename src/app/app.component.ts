@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AsyncLocalStorage } from 'angular-async-local-storage';
 
+import { Category } from './model/category';
+import { Workout } from './model/workout';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -8,14 +11,20 @@ import { AsyncLocalStorage } from 'angular-async-local-storage';
 })
 export class AppComponent implements OnInit{
 
-  private categories: any = [];
+  private categories: Category[] = [];
+  private workouts: Workout[] = [];
 
   constructor(protected localStorage: AsyncLocalStorage) {
 
   }
 
   ngOnInit() {
-    this.categories = [{id : 1, title: 'Aerobics'}, {id : 2, title: 'Jogging'}, {id : 3, title: 'Walking'}];
+    this.categories = [{title: 'Aerobics'}, {title: 'Jogging'}, {title: 'Walking'}];
     this.localStorage.setItem('categories', this.categories).subscribe(() => {});
+
+    this.workouts = [{title: 'Jogging', note:'slow', calories:55.2, category:'Jogging'},
+                      {title: 'Zumba', note:'at office', calories:5.2, category:'Aerobics'},
+                      {title: 'Walking', note:'at race course', calories:45, category:'Walking'}];
+    this.localStorage.setItem('workouts', this.workouts).subscribe(() => {});
   }
 }

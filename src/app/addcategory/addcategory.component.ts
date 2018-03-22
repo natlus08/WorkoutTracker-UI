@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ElementRef, Renderer2 } from '@angular/core';
+import { FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
+
 
 import { CategoryService } from '../services/category.service'
 
@@ -12,7 +15,7 @@ import { Category } from '../model/category';
 
 export class AddcategoryComponent implements OnInit {
 
-  public categories:any = [];
+  public categories:Category[] = [];
 
   public newCategory:string = '';
 
@@ -20,15 +23,29 @@ export class AddcategoryComponent implements OnInit {
 
   public categoryFound:boolean = false;
 
-  constructor(private _categoryService: CategoryService) { }
+  public editCategoryFound:boolean = false;
+
+  public editCategoryTitle:string = '';
+
+  public editCategoryForm: FormGroup;
+
+  constructor(private _categoryService: CategoryService, private fb: FormBuilder, private element: ElementRef, private renderer: Renderer2) { }
 
   ngOnInit() {
+
+    /*this.editCategoryForm = this._fb.group({
+      titles: this._fb.array([Validators.required])
+    });*/
+    this.editCategoryForm = this.fb.group({
+      category: this.fb.array([])
+    })
     this.getCategories();
   }
 
   getCategories() : void{
     this._categoryService.getCategories().subscribe((data) => {
         this.categories = data;
+        //this.patchValues()
       }
     );
   }
@@ -45,22 +62,62 @@ export class AddcategoryComponent implements OnInit {
       this.categories.push(new Category(this.newCategory));
       this._categoryService.addCategory(this.categories).subscribe(() => {
         this.newCategory = '';
+        //this.patchValues();
       });
     }
   }
 
   editCategory(index:number) : void {
-
+    this.renderer.addClass(this.element.nativeElement.querySelector('#edit_'+index),'d-none');
+    this.renderer.removeClass(this.element.nativeElement.querySelector('#update_'+index),'d-none');
+    this.renderer.removeAttribute(this.element.nativeElement.querySelector('#title_'+index),'readonly');
   }
 
   updateCategory(index:number) : void {
-
+    this.editCategoryFound = false;
+    this.editCategoryTitle = this.element.nativeElement.querySelector('#title_'+index).value;
+    this.renderer.addClass(this.element.nativeElement.querySelector('#msg_'+index),'d-none');
+    this.categories.forEach(category => {
+      if(category.title.toLowerCase() == this.editCategoryTitle.toLowerCase()){
+        this.renderer.removeClass(this.element.nativeElement.querySelector('#msg_'+index),'d-none');
+        this.editCategoryFound = true;
+        return;
+      }
+    });
+    if(!this.editCategoryFound){
+      //this.category = this.categories[index];
+      //this.category.title = this.editCategoryTitle;
+      this.categories.splice(index, 1);
+      this.categories.push(new Category(this.editCategoryTitle));
+      this._categoryService.addCategory(this.categories).subscribe(() => {
+        this.newCategory = '';
+        //this.patchValues();
+      });
+    }
   }
 
   removeCategory(index:number) : void{
-    this.categories.splice(index, index);
+    this.categories.splice(index, 1);
     this._categoryService.addCategory(this.categories).subscribe(() => {
       this.newCategory = '';
     });
   }
+
+ /* removeCategory(i: number) {
+    const control = <FormArray>this.editCategoryForm.controls['category'];
+    control.removeAt(i);
+    console.log(control);
+  }
+
+  patchValues() {
+    const control = <FormArray>this.editCategoryForm.controls['category'];
+    this.categories.forEach(x => {
+      control.push(this.patchValue(x.title));
+    })
+  }
+  patchValue(title) {
+    return this.fb.group({
+      title: [title]
+    })
+  }*/
 }

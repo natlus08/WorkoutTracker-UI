@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AsyncLocalStorageModule } from 'angular-async-local-storage';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 //import components
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -16,6 +16,7 @@ import { TrackComponent } from './track/track.component';
 import { mainrouting } from './router/main-routing.module';
 //import services
 import { CategoryService } from './services/category.service';
+import { WorkoutService } from './services/workout.service';
 //import pipes
 import { CategoryFilterPipe } from './pipes/categoryfilter.pipe';
 //import models
@@ -39,9 +40,10 @@ import { CategoryFilterPipe } from './pipes/categoryfilter.pipe';
     NgbModule.forRoot(),
     mainrouting,
     AsyncLocalStorageModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
-  providers: [CategoryService],
+  providers: [CategoryService, WorkoutService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
