@@ -12,9 +12,9 @@ import { TrackComponent } from '../track/track.component';
 
 const mainRoutes: Routes = [
   { path: 'View', component: ViewworkoutsComponent },
-  { path: 'Edit', component: EditworkoutComponent },
-  { path: 'Start', component: StartworkoutComponent },
-  { path: 'End', component: EndworkoutComponent },
+  { path: 'Edit/:index', component: EditworkoutComponent },
+  { path: 'Start/:index', component: StartworkoutComponent },
+  { path: 'End/:index', component: EndworkoutComponent },
   { path: 'Create', component: AddworkoutComponent },
   { path: 'Category', component: AddcategoryComponent },
   { path: 'Track', component: TrackComponent },

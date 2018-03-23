@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Router } from '@angular/router';
 
 import { CategoryService } from '../services/category.service';
-import { WorkoutService } from '../services/workout.service'
+import { WorkoutService } from '../services/workout.service';
 
 import { Category } from '../model/category';
 import { Workout } from '../model/workout';
@@ -21,8 +23,14 @@ export class AddworkoutComponent implements OnInit {
 
   private workoutFound:boolean = false;
 
-  constructor(private _categoryService: CategoryService, private _workoutService: WorkoutService) {
-    this.workout = new Workout('','',0,'');
+  private newCategory:string = '';
+
+  private categoryFound:boolean = false;
+
+  private categoryAdded:boolean = false;
+
+  constructor(private _categoryService: CategoryService, private _workoutService: WorkoutService, private modalService: NgbModal, private router: Router) {
+    this.workout = new Workout('','',0,'',null,null,null,null,false);
   }
 
   ngOnInit() {
@@ -47,7 +55,6 @@ export class AddworkoutComponent implements OnInit {
   addworkout() : void{
     this.workoutFound = false;
     this.workouts.forEach(workout => {
-      console.log(workout.title.toLowerCase()+'----'+this.workout.title.toLowerCase());
       if(workout.title.toLowerCase() == this.workout.title.toLowerCase()){
         this.workoutFound = true;
         return;
@@ -56,7 +63,7 @@ export class AddworkoutComponent implements OnInit {
     if(!this.workoutFound){
       this.workouts.push(this.workout);
       this._workoutService.addWorkout(this.workouts).subscribe(() => {
-
+        this.router.navigate(['/View']);
       });
     }
   }
@@ -67,6 +74,30 @@ export class AddworkoutComponent implements OnInit {
 
   decrement() : void{
     this.workout.calories = (this.workout.calories > 0.1) ? (this.workout.calories - 0.1) : this.workout.calories;
+  }
+
+  openCategoryModal(content): void{
+    this.categoryFound = false;
+    this.categoryAdded = false;
+    this.modalService.open(content);
+  }
+
+  addCategory() : void{
+    this.categoryFound = false;
+    this.categoryAdded = false;
+    this.categories.forEach(category => {
+      if(category.title.toLowerCase() == this.newCategory.toLowerCase()){
+        this.categoryFound = true;
+        return;
+      }
+    });
+    if(!this.categoryFound){
+      this.categories.push(new Category(this.newCategory));
+      this._categoryService.addCategory(this.categories).subscribe(() => {
+        this.newCategory = '';
+        this.categoryAdded = true;
+      });
+    }
   }
 
 }

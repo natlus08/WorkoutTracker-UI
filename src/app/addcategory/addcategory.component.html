@@ -1,3 +1,4 @@
+<app-navbar></app-navbar>
 <div class="row" xmlns="http://www.w3.org/1999/html">
   <div class="col-12">
     <h3>Add Category</h3>
@@ -38,21 +39,4 @@
      Category already exists!
    </div>
   </div>
-  <!--<div class="col-12">
-    <form [formGroup]="editCategoryForm">
-      <div formArrayName="category">
-        <div *ngFor="let code of editCategoryForm.controls.category.controls | categoryfilter : searchText; let i = index" class="categories">
-          <div class="input-group" formGroupName="{{i}}">
-            <input type="text" class="form-control" readonly formControlName="title" required>
-            <div class="input-group-append">
-              <button class="btn btn-outline-secondary" type="button" (click)="editCategory(i)" id="edit_{{i}}">Edit</button>
-              <button class="btn btn-outline-secondary" type="button" (click)="updateCategory(i)" id="update_{{i}}">Update</button>
-              <button class="btn btn-outline-secondary" type="button" (click)="removeCategory(i)" id="delete_{{i}}">Delete</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </form>
-    {{ editCategoryForm.value | json }}
-  </div>-->
 </div>

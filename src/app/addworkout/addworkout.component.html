@@ -1,3 +1,4 @@
+<app-navbar></app-navbar>
 <div class="row" xmlns="http://www.w3.org/1999/html">
   <div class="col-12">
     <h3>Add Workout</h3>
@@ -36,7 +37,7 @@
   <div class="form-group row required">
     <label for="calories" class="col-sm-4 col-form-label">Calories Burnt / Minute</label>
     <div class="input-group col-sm-8">
-      <input type="number" class="form-control" id="calories" name="calories" step="0.1" required [(ngModel)]="workout.calories">
+      <input type="number" class="form-control" id="calories" name="calories" min="0" step="0.1" required [(ngModel)]="workout.calories">
       <div class="input-group-append">
         <button class="btn btn-outline-secondary" type="button" (click)="decrement()">-</button>
       </div>
@@ -53,7 +54,7 @@
         <option *ngFor="let category of categories">{{category.title}}</option>
       </select>
       <div class="input-group-append">
-        <button class="btn btn-outline-secondary" type="button">+</button>
+        <button class="btn btn-outline-secondary" type="button" (click)="openCategoryModal(content)">+</button>
       </div>
     </div>
   </div>
@@ -63,3 +64,39 @@
     </div>
   </div>
 </form>
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Add Category</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row" xmlns="http://www.w3.org/1999/html">
+      <div class="col-12">
+        <form #addCategoryForm="ngForm">
+          <div class="input-group">
+            <input type="text" required name="newCategory" class="form-control" placeholder="Category to add" aria-label="Category to add" [(ngModel)]="newCategory">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" (click)="addCategory()" type="button" [disabled]="addCategoryForm.invalid">+</button>
+            </div>
+          </div>
+          <div *ngIf="newCategory.invalid && (newCategory.dirty || newCategory.touched)" class="alert alert-danger">
+            <div *ngIf="newCategory.errors.required">
+              Category is required!
+            </div>
+          </div>
+          <div *ngIf="categoryFound" class="alert alert-danger">
+            Category already exists!
+          </div>
+          <div *ngIf="categoryAdded" class="alert alert-success">
+            Category added!
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
+  </div>
+</ng-template>

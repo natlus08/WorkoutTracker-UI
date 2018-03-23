@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ElementRef, Renderer2 } from '@angular/core';
-import { FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 
 import { CategoryService } from '../services/category.service'
@@ -27,25 +27,15 @@ export class AddcategoryComponent implements OnInit {
 
   public editCategoryTitle:string = '';
 
-  public editCategoryForm: FormGroup;
-
-  constructor(private _categoryService: CategoryService, private fb: FormBuilder, private element: ElementRef, private renderer: Renderer2) { }
+ constructor(private _categoryService: CategoryService, private element: ElementRef, private renderer: Renderer2, public activeModal: NgbActiveModal) { }
 
   ngOnInit() {
-
-    /*this.editCategoryForm = this._fb.group({
-      titles: this._fb.array([Validators.required])
-    });*/
-    this.editCategoryForm = this.fb.group({
-      category: this.fb.array([])
-    })
     this.getCategories();
   }
 
   getCategories() : void{
     this._categoryService.getCategories().subscribe((data) => {
         this.categories = data;
-        //this.patchValues()
       }
     );
   }
@@ -85,13 +75,10 @@ export class AddcategoryComponent implements OnInit {
       }
     });
     if(!this.editCategoryFound){
-      //this.category = this.categories[index];
-      //this.category.title = this.editCategoryTitle;
       this.categories.splice(index, 1);
       this.categories.push(new Category(this.editCategoryTitle));
       this._categoryService.addCategory(this.categories).subscribe(() => {
         this.newCategory = '';
-        //this.patchValues();
       });
     }
   }
@@ -102,22 +89,4 @@ export class AddcategoryComponent implements OnInit {
       this.newCategory = '';
     });
   }
-
- /* removeCategory(i: number) {
-    const control = <FormArray>this.editCategoryForm.controls['category'];
-    control.removeAt(i);
-    console.log(control);
-  }
-
-  patchValues() {
-    const control = <FormArray>this.editCategoryForm.controls['category'];
-    this.categories.forEach(x => {
-      control.push(this.patchValue(x.title));
-    })
-  }
-  patchValue(title) {
-    return this.fb.group({
-      title: [title]
-    })
-  }*/
 }
