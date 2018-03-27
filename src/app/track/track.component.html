@@ -1,25 +1,30 @@
 <app-navbar></app-navbar>
-<div class="row justify-content-center">
-  <div class="col-5">
-    Workout time of the day
-  </div>
-  <div class="col-5">
-    25 Minutes
-  </div>
+<div *ngIf = "!dataAvailable; else other_content">
+  No Data Available!
 </div>
-<div class="row justify-content-center">
-  <div class="col-5">
-    Workout time of the week
+<ng-template #other_content>
+  <div class="row justify-content-center">
+    <div class="col-5">
+      Workout time of the day
+    </div>
+    <div class="col-5">
+      {{todaysWO}} Minutes
+    </div>
   </div>
-  <div class="col-5">
-    240 Minutes
+  <div class="row justify-content-center">
+    <div class="col-5">
+      Workout time of the week
+    </div>
+    <div class="col-5">
+      {{weeksWO}} Minutes
+    </div>
   </div>
-</div>
-<div class="row justify-content-center">
-  <div class="col-5">
-    Workout time of the month
+  <div class="row justify-content-center">
+    <div class="col-5">
+      Workout time of the month
+    </div>
+    <div class="col-5">
+      {{monthsWO}} Minutes
+    </div>
   </div>
-  <div class="col-5">
-    1005 Minutes
-  </div>
-</div>
+</ng-template>

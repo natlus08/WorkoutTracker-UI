@@ -37,7 +37,7 @@ export class ViewworkoutsComponent implements OnInit {
     });
   }
 
-  removeWorkout(index:number): void{
+  removeWorkout(index:number): void {
     this.workouts.splice(index, 1);
     this._workoutService.addWorkout(this.workouts).subscribe(() => {
 

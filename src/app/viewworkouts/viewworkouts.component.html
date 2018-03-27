@@ -19,7 +19,7 @@
       <button class="btn btn-outline-dark btn-block" [routerLink] = "['/Edit',i]">Edit</button>
     </div>
     <div class="col-3">
-      <button class="btn btn-outline-dark btn-block" (click)="removeWorkout(i)">Delete</button>
+      <button class="btn btn-outline-dark btn-block" (click)="removeWorkout(i)" [disabled]="workout.started && workoutInProgress">Delete</button>
     </div>
     <div class="col-3">
       <button class="btn btn-outline-dark btn-block" [routerLink] = "['/Start',i]" [disabled]="(!workout.started && workoutInProgress) || (workoutInProgress)">Start</button>

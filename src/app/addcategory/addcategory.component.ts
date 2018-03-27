@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ElementRef, Renderer2 } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-
 
 import { CategoryService } from '../services/category.service'
 
@@ -27,7 +25,7 @@ export class AddcategoryComponent implements OnInit {
 
   public editCategoryTitle:string = '';
 
- constructor(private _categoryService: CategoryService, private element: ElementRef, private renderer: Renderer2, public activeModal: NgbActiveModal) { }
+ constructor(private _categoryService: CategoryService, private element: ElementRef, private renderer: Renderer2) { }
 
   ngOnInit() {
     this.getCategories();
