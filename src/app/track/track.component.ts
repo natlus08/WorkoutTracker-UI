@@ -33,11 +33,11 @@ export class TrackComponent implements OnInit {
 
   private minutes:number = 0;
 
-  private weekChart: Chart = null;
+  //private weekChart: Chart = null;
 
-  private monthChart: Chart = null;
+  //private monthChart: Chart = null;
 
-  private yearChart: Chart = null;
+  //private yearChart: Chart = null;
 
   private weekChartData: number[] = [];
 
@@ -131,30 +131,30 @@ export class TrackComponent implements OnInit {
           this.sat = this.sat + archive.calories;
         }
       }
-      if(this.today.getFullYear() === archive.enddate.getFullYear()){
-        if(archive.enddate.getMonth() === 0){
+      if(this.today.getFullYear() === archive.enddate.getFullYear()) {
+        if (archive.enddate.getMonth() === 0) {
           this.jan = this.jan + archive.calories;
-        }else if(archive.enddate.getMonth() === 1){
+        } else if (archive.enddate.getMonth() === 1) {
           this.feb = this.feb + archive.calories;
-        }else if(archive.enddate.getMonth() === 2){
+        } else if (archive.enddate.getMonth() === 2) {
           this.mar = this.mar + archive.calories;
-        }else if(archive.enddate.getMonth() === 3){
+        } else if (archive.enddate.getMonth() === 3) {
           this.apr = this.apr + archive.calories;
-        }else if(archive.enddate.getMonth() === 4){
+        } else if (archive.enddate.getMonth() === 4) {
           this.may = this.may + archive.calories;
-        }else if(archive.enddate.getMonth() === 5){
+        } else if (archive.enddate.getMonth() === 5) {
           this.jun = this.jun + archive.calories;
-        }else if(archive.enddate.getMonth() === 6){
+        } else if (archive.enddate.getMonth() === 6) {
           this.jul = this.jul + archive.calories;
-        }else if(archive.enddate.getMonth() === 7){
+        } else if (archive.enddate.getMonth() === 7) {
           this.aug = this.aug + archive.calories;
-        }else if(archive.enddate.getMonth() === 8){
+        } else if (archive.enddate.getMonth() === 8) {
           this.sep = this.sep + archive.calories;
-        }else if(archive.enddate.getMonth() === 9){
+        } else if (archive.enddate.getMonth() === 9) {
           this.oct = this.oct + archive.calories;
-        }else if(archive.enddate.getMonth() === 10){
+        } else if (archive.enddate.getMonth() === 10) {
           this.nov = this.nov + archive.calories;
-        }else if(archive.enddate.getMonth() === 11){
+        } else if (archive.enddate.getMonth() === 11) {
           this.dec = this.dec + archive.calories;
         }
       }
@@ -203,7 +203,7 @@ export class TrackComponent implements OnInit {
     });
   }
 
-  weekChart = new Chart({
+  private weekChart = new Chart({
     chart: {
       type: 'column'
     },
@@ -252,7 +252,7 @@ export class TrackComponent implements OnInit {
     }
   });
 
-  monthChart = new Chart({
+  private monthChart = new Chart({
     chart: {
       type: 'column'
     },
@@ -301,7 +301,7 @@ export class TrackComponent implements OnInit {
     }
   });
 
-  yearChart = new Chart({
+  private yearChart = new Chart({
     chart: {
       type: 'column'
     },
