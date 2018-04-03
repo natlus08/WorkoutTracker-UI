@@ -249,12 +249,10 @@ export class TrackComponent implements OnInit {
       floating: true,
       borderWidth: 1,
       backgroundColor: '#FFFFFF',
-      shadow: true
-    },
-    credits: {
+      shadow: true,
       enabled: false
     },
-    legend: {
+    credits: {
       enabled: false
     }
   });
@@ -301,12 +299,10 @@ export class TrackComponent implements OnInit {
       floating: true,
       borderWidth: 1,
       backgroundColor: '#FFFFFF',
-      shadow: true
-    },
-    credits: {
+      shadow: true,
       enabled: false
     },
-    legend: {
+    credits: {
       enabled: false
     }
   });
@@ -353,15 +349,11 @@ export class TrackComponent implements OnInit {
       floating: true,
       borderWidth: 1,
       backgroundColor: '#FFFFFF',
-      shadow: true
+      shadow: true,
+      enabled: false
     },
     credits: {
       enabled: false
-    },
-    legend: {
-      enabled: false
     }
   });
-
-
 }
