@@ -20,9 +20,9 @@ export class ViewworkoutsComponent implements OnInit {
   constructor(private _workoutService: WorkoutService) { }
 
   ngOnInit() {
-
-    this.getWorkouts();
-
+    setTimeout(()=>{
+      this.getWorkouts();
+    },100);
   }
 
   getWorkouts() : void{

@@ -13,15 +13,11 @@ import { Archive } from '../model/archive';
 })
 export class TrackComponent implements OnInit {
 
-  private archive: Archive = null;
-
   private archives:Archive[] = [];
 
   private dataAvailable:boolean = true;
 
   private today:Date = new Date();
-
-  private chartToday:Date = new Date();
 
   private todaysWO:number = 0;
 
@@ -32,12 +28,6 @@ export class TrackComponent implements OnInit {
   private days:number = 0;
 
   private minutes:number = 0;
-
-  //private weekChart: Chart = null;
-
-  //private monthChart: Chart = null;
-
-  //private yearChart: Chart = null;
 
   private weekChartData: number[] = [];
 
@@ -57,6 +47,7 @@ export class TrackComponent implements OnInit {
   private w2: number = 0;
   private w3: number = 0;
   private w4: number = 0;
+  private w5: number = 0;
 
   private jan: number = 0;
   private feb: number = 0;
@@ -111,7 +102,6 @@ export class TrackComponent implements OnInit {
 
   chartData(): void {
     var day = this.today.getDay();
-    //var sun,mon,tue,wed,thu,fri,sat = 5;
     this.archives.forEach(archive => {
       this.days = Math.ceil((Math.abs(this.today.getTime() - archive.enddate.getTime())) / (1000 * 3600 * 24));
       if(this.days <= 7 && this.days <= day){
@@ -157,9 +147,24 @@ export class TrackComponent implements OnInit {
         } else if (archive.enddate.getMonth() === 11) {
           this.dec = this.dec + archive.calories;
         }
+        if((this.days <= 31) && (this.today.getMonth() === archive.enddate.getMonth())) {
+          var dayone = new Date(this.today.getFullYear(), this.today.getMonth(), 1);
+          let week = Math.ceil((Math.abs((archive.enddate.getTime() - dayone.getTime()) / 86400000) + dayone.getDay() + 1) / 7 );
+          if (week === 1){
+            this.w1 = this.w1 + archive.calories;
+          }else if(week === 2){
+            this.w2 = this.w2 + archive.calories;
+          }else if(week === 3){
+            this.w3 = this.w3 + archive.calories;
+          }else if(week === 4){
+            this.w4 = this.w4 + archive.calories;
+          }else if(week === 5){
+            this.w5 = this.w5 + archive.calories;
+          }
+        }
       }
     });
-    //this.weekChartData = [sun, mon, tue, wed, thu, fri, sat];
+
     this.weekChartData.push(this.sun);
     this.weekChartData.push(this.mon);
     this.weekChartData.push(this.tue);
@@ -182,12 +187,11 @@ export class TrackComponent implements OnInit {
     this.yearChartData.push(this.nov);
     this.yearChartData.push(this.dec);
 
-
-    //this.weekChartData = [107, 31, 35, 203, 25, 87, 5];
-
-    this.monthChartData = [107, 31, 35, 203];
-
-    //this.yearChartData = [10, 31, 35, 203, 25, 87, 52, 66, 74, 12, 36, 19];
+    this.monthChartData.push(this.w1);
+    this.monthChartData.push(this.w2);
+    this.monthChartData.push(this.w3);
+    this.monthChartData.push(this.w4);
+    this.monthChartData.push(this.w5);
 
     this.weekChart.addSerie({
       name: 'workouts',
@@ -208,7 +212,7 @@ export class TrackComponent implements OnInit {
       type: 'column'
     },
     title: {
-      text: 'Workout for this week'
+      text: 'Workouts for this week'
     },
     xAxis: {
       categories: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
@@ -249,6 +253,9 @@ export class TrackComponent implements OnInit {
     },
     credits: {
       enabled: false
+    },
+    legend: {
+      enabled: false
     }
   });
 
@@ -257,10 +264,10 @@ export class TrackComponent implements OnInit {
       type: 'column'
     },
     title: {
-      text: 'Workout for this Month'
+      text: 'Workouts for this Month'
     },
     xAxis: {
-      categories: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+      categories: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5'],
       title: {
         text: null
       }
@@ -298,6 +305,9 @@ export class TrackComponent implements OnInit {
     },
     credits: {
       enabled: false
+    },
+    legend: {
+      enabled: false
     }
   });
 
@@ -306,7 +316,7 @@ export class TrackComponent implements OnInit {
       type: 'column'
     },
     title: {
-      text: 'Workout for this year'
+      text: 'Workouts for this year'
     },
     xAxis: {
       categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -346,6 +356,9 @@ export class TrackComponent implements OnInit {
       shadow: true
     },
     credits: {
+      enabled: false
+    },
+    legend: {
       enabled: false
     }
   });
