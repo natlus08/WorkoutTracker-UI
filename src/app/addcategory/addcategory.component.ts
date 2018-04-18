@@ -41,16 +41,16 @@ export class AddcategoryComponent implements OnInit {
   addCategory() : void{
     this.categoryFound = false;
     this.categories.forEach(category => {
-      if(category.title.toLowerCase() == this.newCategory.toLowerCase()){
+      if(category.name.toLowerCase() == this.newCategory.toLowerCase()){
         this.categoryFound = true;
         return;
       }
     });
     if(!this.categoryFound){
-      this.categories.push(new Category(this.newCategory));
-      this._categoryService.addCategory(this.categories).subscribe(() => {
+      let newCategoryObj: Category = new Category(null,this.newCategory);
+      this._categoryService.addCategory(newCategoryObj).subscribe(() => {
         this.newCategory = '';
-        //this.patchValues();
+        this.categories.push(newCategoryObj);
       });
     }
   }
@@ -73,18 +73,21 @@ export class AddcategoryComponent implements OnInit {
       }
     });
     if(!this.editCategoryFound){
-      this.categories.splice(index, 1);
-      this.categories.push(new Category(this.editCategoryTitle));
-      this._categoryService.addCategory(this.categories).subscribe(() => {
+      let currentCategory: Category = this.categories[index];
+      currentCategory.name = this.editCategoryTitle;
+      this._categoryService.editCategory(currentCategory).subscribe(() => {
         this.newCategory = '';
+        this.categories.splice(index, 1);
+        this.categories.push(currentCategory);
       });
     }
   }
 
   removeCategory(index:number) : void{
-    this.categories.splice(index, 1);
-    this._categoryService.addCategory(this.categories).subscribe(() => {
+    let currentCategory: Category = this.categories[index];
+    this._categoryService.deleteCategory(currentCategory.id).subscribe(() => {
       this.newCategory = '';
+      this.categories.splice(index, 1);
     });
   }
 }

@@ -11,8 +11,6 @@ import { Workout } from '../model/workout';
 })
 export class ViewworkoutsComponent implements OnInit {
 
-  private workout:Workout = null;
-
   private workouts:Workout[] = [];
 
   private workoutInProgress:boolean = false;
@@ -28,18 +26,24 @@ export class ViewworkoutsComponent implements OnInit {
   getWorkouts() : void{
     this._workoutService.getWorkouts().subscribe((data) => {
         this.workouts = data;
-        this.workouts.forEach(workout => {
+        /*this.workouts.forEach(workout => {
             if(workout.started){
               this.workoutInProgress = true;
               return;
             }
-        });
+        });*/
+    });
+    this._workoutService.getActiveWorkout().subscribe((data) => {
+      if(null != data){
+        this.workoutInProgress = true;
+        return;
+      }
     });
   }
 
-  removeWorkout(index:number): void {
-    this.workouts.splice(index, 1);
-    this._workoutService.addWorkout(this.workouts).subscribe(() => {
+  removeWorkout(id:number): void {
+    //this.workouts.splice(index, 1);
+    this._workoutService.deleteWorkout(id).subscribe(() => {
 
     });
   }

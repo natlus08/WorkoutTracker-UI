@@ -37,7 +37,7 @@
     <div class=" input-group col-sm-8">
       <select class="form-control" id="category" name="category" [(ngModel)]="workout.category" required>
         <option value="Select">Select</option>
-        <option *ngFor="let category of categories">{{category.title}}</option>
+        <option *ngFor="let category of categories">{{category.name}}</option>
       </select>
       <div class="input-group-append">
         <button class="btn btn-outline-secondary" type="button" (click)="openCategoryModal(content)">+</button>

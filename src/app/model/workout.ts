@@ -1,13 +1,11 @@
+import { Category } from './model/category';
+
 export class Workout {
   constructor(
+    public id: number,
     public title: string,
     public note: string,
-    public calories: number,
-    public category: string,
-    public startdate: Date,
-    public enddate: Date,
-    public starttime: Date,
-    public endtime: Date,
-    public started: boolean
+    public caloriesBurnt: number,
+    public category: Category
   ) {  }
 }

@@ -30,7 +30,7 @@ export class AddworkoutComponent implements OnInit {
   private categoryAdded:boolean = false;
 
   constructor(private _categoryService: CategoryService, private _workoutService: WorkoutService, private modalService: NgbModal, private router: Router) {
-    this.workout = new Workout('','',0,'',null,null,null,null,false);
+    this.workout = new Workout(null,'','',0,null);
   }
 
   ngOnInit() {
@@ -69,11 +69,11 @@ export class AddworkoutComponent implements OnInit {
   }
 
   increment() : void{
-    this.workout.calories = this.workout.calories + 0.1;
+    this.workout.caloriesBurnt = this.workout.caloriesBurnt + 0.1;
   }
 
   decrement() : void{
-    this.workout.calories = (this.workout.calories > 0.1) ? (this.workout.calories - 0.1) : this.workout.calories;
+    this.workout.caloriesBurnt = (this.workout.caloriesBurnt > 0.1) ? (this.workout.caloriesBurnt - 0.1) : this.workout.caloriesBurnt;
   }
 
   openCategoryModal(content): void{
@@ -92,9 +92,10 @@ export class AddworkoutComponent implements OnInit {
       }
     });
     if(!this.categoryFound){
-      this.categories.push(new Category(this.newCategory));
-      this._categoryService.addCategory(this.categories).subscribe(() => {
+      let newCategoryObj: Category = new Category(null,this.newCategory);
+      this._categoryService.addCategory(newCategoryObj).subscribe(() => {
         this.newCategory = '';
+        this.categories.push(newCategoryObj);
         this.categoryAdded = true;
       });
     }

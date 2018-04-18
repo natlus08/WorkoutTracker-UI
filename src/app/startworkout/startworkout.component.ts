@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { WorkoutService } from '../services/workout.service';
 
-import { Workout } from '../model/workout';
+import { ActiveWorkout } from '../model/activeworkout';
 
 @Component({
   selector: 'app-startworkout',
@@ -12,9 +12,7 @@ import { Workout } from '../model/workout';
 })
 export class StartworkoutComponent implements OnInit {
 
-  private workout:Workout = null;
-
-  private workouts:Workout[] = [];
+  private activeWorkout:ActiveWorkout = null;
 
   private selectedId: number;
 
@@ -31,30 +29,31 @@ export class StartworkoutComponent implements OnInit {
   private today:Date = new Date();
 
   constructor(private _workoutService: WorkoutService, private route: ActivatedRoute, private router: Router) {
-    this.workout = new Workout('','',0,'',null,null,null,null,false);
+    this.activeWorkout =  new ActiveWorkout(null,null,'',null,null,null,null,false);
   }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.selectedId =  +params['index'];
     });
-    this.getWorkouts();
+    this.prepWorkout();
   }
 
-  getWorkouts() : void{
-    this._workoutService.getWorkouts().subscribe((data) => {
-        this.workouts = data;
-        this.workout = this.workouts[this.selectedId];
-        this.workout.startdate = this.today;
-        this.workout.starttime = this.today;
+  prepWorkout() : void{
+    this._workoutService.getWorkout(this.selectedId).subscribe((data) => {
+        //this.workout = data;
+        //this.workout = this.workouts[this.selectedId];
+        this.activeWorkout.workout = data;
+        this.activeWorkout.startdate = this.today;
+        this.activeWorkout.starttime = this.today;
       }
     );
   }
 
   start() : void {
-    this.workout.started = true;
-    this.workouts[this.selectedId] = this.workout;
-    this._workoutService.addWorkout(this.workouts).subscribe(() => {
+    this.activeWorkout.status = true;
+    //this.workouts[this.selectedId] = this.workout;
+    this._workoutService.startWorkout(this.activeWorkout).subscribe(() => {
       this.router.navigate(['/View']);
     });
   }
@@ -66,13 +65,13 @@ export class StartworkoutComponent implements OnInit {
   timereintialize($event):void {
     this.hours = $event.substring(0, 2);
     this.minutes = $event.substring(3, 5);
-    this.workout.starttime = new Date(1970, 0, 1, this.hours, this.minutes, 0);
+    this.activeWorkout.starttime = new Date(1970, 0, 1, this.hours, this.minutes, 0);
   }
 
   datereintialize($event):void {
     this.year = $event.substring(0, 4);
     this.month = $event.substring(5, 7);
     this.date = $event.substring(8, 10);
-    this.workout.startdate = new Date(this.year,this.month-1,this.date, 0, 0, 0);
+    this.activeWorkout.startdate = new Date(this.year,this.month-1,this.date, 0, 0, 0);
   }
 }

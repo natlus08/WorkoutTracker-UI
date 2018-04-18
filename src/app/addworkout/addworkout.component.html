@@ -37,7 +37,7 @@
   <div class="form-group row required">
     <label for="calories" class="col-sm-4 col-form-label">Calories/ Minute</label>
     <div class="input-group col-sm-8">
-      <input type="number" class="form-control" id="calories" name="calories" min="0" step="0.1" required [(ngModel)]="workout.calories">
+      <input type="number" class="form-control" id="calories" name="calories" min="0" step="0.1" required [(ngModel)]="workout.caloriesBurnt">
       <div class="input-group-append">
         <button class="btn btn-outline-secondary" type="button" (click)="decrement()">-</button>
       </div>
@@ -51,7 +51,7 @@
     <div class=" input-group col-sm-8">
       <select class="form-control" id="category" name="category" required [(ngModel)]="workout.category">
         <option value="Select">Select</option>
-        <option *ngFor="let category of categories">{{category.title}}</option>
+        <option *ngFor="let category of categories">{{category.name}}</option>
       </select>
       <div class="input-group-append">
         <button class="btn btn-outline-secondary" type="button" (click)="openCategoryModal(content)">+</button>

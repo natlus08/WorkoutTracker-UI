@@ -32,7 +32,7 @@ export class EditworkoutComponent implements OnInit {
   private categoryAdded:boolean = false;
 
   constructor(private route: ActivatedRoute, private router: Router, private _workoutService: WorkoutService, private _categoryService: CategoryService, private modalService: NgbModal) {
-    this.workout = new Workout('','',0,'',null,null,null,null,false);
+    this.workout = new Workout(null,'','',0,null);
   }
 
   ngOnInit() {
@@ -89,10 +89,11 @@ export class EditworkoutComponent implements OnInit {
       }
     });
     if(!this.categoryFound){
-      this.categories.push(new Category(this.newCategory));
-      this._categoryService.addCategory(this.categories).subscribe(() => {
+      let newCategoryObj: Category = new Category(null,this.newCategory);
+      this._categoryService.addCategory(newCategoryObj).subscribe(() => {
         this.newCategory = '';
         this.categoryAdded = true;
+        this.categories.push(newCategoryObj);
       });
     }
   }
