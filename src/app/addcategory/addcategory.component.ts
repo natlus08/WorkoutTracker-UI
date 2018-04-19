@@ -48,46 +48,67 @@ export class AddcategoryComponent implements OnInit {
     });
     if(!this.categoryFound){
       let newCategoryObj: Category = new Category(null,this.newCategory);
-      this._categoryService.addCategory(newCategoryObj).subscribe(() => {
+      this._categoryService.addCategory(newCategoryObj).subscribe((data) => {
         this.newCategory = '';
-        this.categories.push(newCategoryObj);
+        this.categories.push(data);
       });
     }
   }
 
-  editCategory(index:number) : void {
-    this.renderer.addClass(this.element.nativeElement.querySelector('#edit_'+index),'d-none');
-    this.renderer.removeClass(this.element.nativeElement.querySelector('#update_'+index),'d-none');
-    this.renderer.removeAttribute(this.element.nativeElement.querySelector('#title_'+index),'readonly');
+  editCategory(id:number) : void {
+    this.renderer.addClass(this.element.nativeElement.querySelector('#edit_'+id),'d-none');
+    this.renderer.removeClass(this.element.nativeElement.querySelector('#update_'+id),'d-none');
+    this.renderer.removeAttribute(this.element.nativeElement.querySelector('#title_'+id),'readonly');
   }
 
-  updateCategory(index:number) : void {
+  updateCategory(id:number) : void {
     this.editCategoryFound = false;
-    this.editCategoryTitle = this.element.nativeElement.querySelector('#title_'+index).value;
-    this.renderer.addClass(this.element.nativeElement.querySelector('#msg_'+index),'d-none');
+    this.editCategoryTitle = this.element.nativeElement.querySelector('#title_'+id).value;
+    this.renderer.addClass(this.element.nativeElement.querySelector('#msg_'+id),'d-none');
     this.categories.forEach(category => {
-      if(category.title.toLowerCase() == this.editCategoryTitle.toLowerCase()){
-        this.renderer.removeClass(this.element.nativeElement.querySelector('#msg_'+index),'d-none');
+      if(category.name.toLowerCase() == this.editCategoryTitle.toLowerCase()){
+        this.renderer.removeClass(this.element.nativeElement.querySelector('#msg_'+id),'d-none');
         this.editCategoryFound = true;
         return;
       }
     });
     if(!this.editCategoryFound){
-      let currentCategory: Category = this.categories[index];
+      let currentCategory: Category = this.getCategoryFromArray(id);
       currentCategory.name = this.editCategoryTitle;
-      this._categoryService.editCategory(currentCategory).subscribe(() => {
+      this._categoryService.editCategory(currentCategory).subscribe((data) => {
         this.newCategory = '';
-        this.categories.splice(index, 1);
-        this.categories.push(currentCategory);
+        this.categories.splice(this.getIndex(id),1);
+        this.categories.push(data);
       });
     }
   }
 
-  removeCategory(index:number) : void{
-    let currentCategory: Category = this.categories[index];
+  removeCategory(id:number) : void{
+    let currentCategory: Category = this.getCategoryFromArray(id);
     this._categoryService.deleteCategory(currentCategory.id).subscribe(() => {
       this.newCategory = '';
-      this.categories.splice(index, 1);
+      this.categories.splice(this.getIndex(id),1);
     });
   }
+
+  getIndex(id: number) : number {
+    let pos:number = -1;
+    this.categories.forEach(function(category, index){
+      if(category.id === id){
+        pos = index;
+      }
+    });
+    return pos;
+  }
+
+  getCategoryFromArray(id: number) : Category{
+    let categoryFromId: Category = null;
+    this.categories.forEach(category => {
+      if(category.id === id){
+        categoryFromId = category;
+      }
+    });
+    return categoryFromId;
+  }
+
 }

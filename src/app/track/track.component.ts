@@ -86,15 +86,18 @@ export class TrackComponent implements OnInit {
   calculateWOMinutes(): void{
     var day = this.today.getDay();
     this.activeWorkouts.forEach(activeWorkout => {
-      this.days = Math.ceil((Math.abs(this.today.getTime() - activeWorkout.enddate.getTime())) / (1000 * 3600 * 24));
-      this.minutes = Math.ceil((Math.abs(activeWorkout.enddate.getTime() - activeWorkout.startdate.getTime())) / (1000 * 60));
+      alert(JSON.stringify(activeWorkout))
+      let minStartDate = new Date(activeWorkout.startDate.getFullYear(), activeWorkout.startDate.getMonth(), activeWorkout.startDate.getDate(),activeWorkout.startTime.getHours(), activeWorkout.startTime.getMinutes(),0);
+      let minEndDate = new Date(activeWorkout.endDate.getFullYear(), activeWorkout.endDate.getMonth(), activeWorkout.endDate.getDate(),activeWorkout.endTime.getHours(), activeWorkout.endTime.getMinutes(),0);
+      this.days = Math.ceil((Math.abs(this.today.getTime() - minEndDate.getTime())) / (1000 * 3600 * 24));
+      this.minutes = Math.ceil((Math.abs(minEndDate.getTime() - minStartDate.getTime())) / (1000 * 60));
       if(this.days == 1){
         this.todaysWO = this.todaysWO + this.minutes;
       }
       if(this.days <= 7 && this.days <= day){
         this.weeksWO = this.weeksWO + this.minutes;
       }
-      if(this.days <= 31 && (this.today.getMonth() === activeWorkout.enddate.getMonth())){
+      if(this.days <= 31 && (this.today.getMonth() === minEndDate.getMonth())){
         this.monthsWO = this.monthsWO + this.minutes;
       }
     });
@@ -103,54 +106,56 @@ export class TrackComponent implements OnInit {
   chartData(): void {
     var day = this.today.getDay();
     this.activeWorkouts.forEach(activeWorkout => {
-      this.days = Math.ceil((Math.abs(this.today.getTime() - activeWorkout.enddate.getTime())) / (1000 * 3600 * 24));
+      let startDate = new Date(activeWorkout.startDate.getFullYear(), activeWorkout.startDate.getMonth(), activeWorkout.startDate.getDate(),activeWorkout.startTime.getHours(), activeWorkout.startTime.getMinutes(),0);
+      let endDate = new Date(activeWorkout.endDate.getFullYear(), activeWorkout.endDate.getMonth(), activeWorkout.endDate.getDate(),activeWorkout.endTime.getHours(), activeWorkout.endTime.getMinutes(),0);
+      this.days = Math.ceil((Math.abs(this.today.getTime() - endDate.getTime())) / (1000 * 3600 * 24));
       let calories = this.calorieCalculator(activeWorkout);
       if(this.days <= 7 && this.days <= day){
-        if(activeWorkout.enddate.getDay() === 0){
+        if(endDate.getDay() === 0){
           this.sun = this.sun + calories;
-        }else if(activeWorkout.enddate.getDay() === 1){
+        }else if(endDate.getDay() === 1){
           this.mon = this.mon + calories;
-        }else if(activeWorkout.enddate.getDay() === 2){
+        }else if(endDate.getDay() === 2){
           this.tue = this.tue + calories;
-        }else if(activeWorkout.enddate.getDay() === 3){
+        }else if(endDate.getDay() === 3){
           this.wed = this.wed + calories;
-        }else if(activeWorkout.enddate.getDay() === 4){
+        }else if(endDate.getDay() === 4){
           this.thu = this.thu + calories;
-        }else if(activeWorkout.enddate.getDay() === 5){
+        }else if(endDate.getDay() === 5){
           this.fri = this.fri + calories;
-        }else if(activeWorkout.enddate.getDay() === 6){
+        }else if(endDate.getDay() === 6){
           this.sat = this.sat + calories;
         }
       }
-      if(this.today.getFullYear() === activeWorkout.enddate.getFullYear()) {
-        if (activeWorkout.enddate.getMonth() === 0) {
+      if(this.today.getFullYear() === endDate.getFullYear()) {
+        if (endDate.getMonth() === 0) {
           this.jan = this.jan + calories;
-        } else if (activeWorkout.enddate.getMonth() === 1) {
+        } else if (endDate.getMonth() === 1) {
           this.feb = this.feb + calories;
-        } else if (activeWorkout.enddate.getMonth() === 2) {
+        } else if (endDate.getMonth() === 2) {
           this.mar = this.mar + calories;
-        } else if (activeWorkout.enddate.getMonth() === 3) {
+        } else if (endDate.getMonth() === 3) {
           this.apr = this.apr + calories;
-        } else if (activeWorkout.enddate.getMonth() === 4) {
+        } else if (endDate.getMonth() === 4) {
           this.may = this.may + calories;
-        } else if (activeWorkout.enddate.getMonth() === 5) {
+        } else if (endDate.getMonth() === 5) {
           this.jun = this.jun + calories;
-        } else if (activeWorkout.enddate.getMonth() === 6) {
+        } else if (endDate.getMonth() === 6) {
           this.jul = this.jul + calories;
-        } else if (activeWorkout.enddate.getMonth() === 7) {
+        } else if (endDate.getMonth() === 7) {
           this.aug = this.aug + calories;
-        } else if (activeWorkout.enddate.getMonth() === 8) {
+        } else if (endDate.getMonth() === 8) {
           this.sep = this.sep + calories;
-        } else if (activeWorkout.enddate.getMonth() === 9) {
+        } else if (endDate.getMonth() === 9) {
           this.oct = this.oct + calories;
-        } else if (activeWorkout.enddate.getMonth() === 10) {
+        } else if (endDate.getMonth() === 10) {
           this.nov = this.nov + calories;
-        } else if (activeWorkout.enddate.getMonth() === 11) {
+        } else if (endDate.getMonth() === 11) {
           this.dec = this.dec + calories;
         }
-        if((this.days <= 31) && (this.today.getMonth() === activeWorkout.enddate.getMonth())) {
+        if((this.days <= 31) && (this.today.getMonth() === endDate.getMonth())) {
           var dayone = new Date(this.today.getFullYear(), this.today.getMonth(), 1);
-          let week = Math.ceil((Math.abs((activeWorkout.enddate.getTime() - dayone.getTime()) / 86400000) + dayone.getDay() + 1) / 7 );
+          let week = Math.ceil((Math.abs((endDate.getTime() - dayone.getTime()) / 86400000) + dayone.getDay() + 1) / 7 );
           if (week === 1){
             this.w1 = this.w1 + calories;
           }else if(week === 2){
@@ -209,11 +214,25 @@ export class TrackComponent implements OnInit {
   }
 
   calorieCalculator(activeWorkout: ActiveWorkout): number {
-    let startDate = new Date();
-    let endDate = new Date();
-    startDate = new Date(activeWorkout.startdate.getFullYear(), activeWorkout.startdate.getMonth(), activeWorkout.startdate.getDate(),activeWorkout.starttime.getHours(), activeWorkout.starttime.getMinutes(),0);
-    endDate = new Date(activeWorkout.enddate.getFullYear(), activeWorkout.enddate.getMonth(), activeWorkout.enddate.getDate(),activeWorkout.endtime.getHours(), activeWorkout.endtime.getMinutes(),0);
-    return ((endDate.getTime() -  startDate.getTime())/(1000*60))*activeWorkout.workout.caloriesBurnt;
+    let calStartDate = new Date();
+    let calEndDate = new Date();
+    calStartDate = new Date(activeWorkout.startDate.getFullYear(), activeWorkout.startDate.getMonth(), activeWorkout.startDate.getDate(),activeWorkout.startTime.getHours(), activeWorkout.startTime.getMinutes(),0);
+    calEndDate = new Date(activeWorkout.endDate.getFullYear(), activeWorkout.endDate.getMonth(), activeWorkout.endDate.getDate(),activeWorkout.endTime.getHours(), activeWorkout.endTime.getMinutes(),0);
+    return ((calEndDate.getTime() -  calStartDate.getTime())/(1000*60))*activeWorkout.workout.caloriesBurnt;
+  }
+
+  timeFormat(date: Date): Date {
+    let hoursFormat = date.toString().substring(0, 2);
+    let minutesFormat = date.toString().substring(3, 5);
+    let secondsFormat = date.toString().substring(6, 8);
+    return new Date(1970, 0, 1, hoursFormat, minutesFormat, secondsFormat);
+  }
+
+  dateFormat(date: Date): Date {
+    let yearFormat = date.toString().substring(0, 4);
+    let monthFormat = date.toString().substring(5, 7);
+    let dateFormat = date.toString().substring(8, 10);
+    return new Date(yearFormat,monthFormat-1,dateFormat, 0, 0, 0);
   }
 
   private weekChart = new Chart({

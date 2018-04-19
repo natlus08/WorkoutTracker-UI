@@ -1,4 +1,4 @@
-import { Category } from './model/category';
+import { Category } from './category';
 
 export class Workout {
   constructor(

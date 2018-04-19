@@ -5,6 +5,7 @@ import { WorkoutService } from '../services/workout.service';
 
 import { Workout } from '../model/workout';
 import { ActiveWorkout } from '../model/activeworkout';
+import { Category } from '../model/category';
 
 @Component({
   selector: 'app-endworkout',
@@ -13,15 +14,9 @@ import { ActiveWorkout } from '../model/activeworkout';
 })
 export class EndworkoutComponent implements OnInit {
 
-  //private workout:Workout = null;
-
-  //private workouts:Workout[] = [];
-
   private selectedId: number;
 
   private activeWorkout: ActiveWorkout = null;
-
-  //private archives:Archive[] = [];
 
   private today:Date = new Date();
 
@@ -40,8 +35,7 @@ export class EndworkoutComponent implements OnInit {
   private date:number = 0;
 
   constructor(private _workoutService: WorkoutService, private route: ActivatedRoute, private router: Router) {
-    //this.workout = new Workout(null,'','',0,null);
-    this.activeWorkout = new ActiveWorkout(null,null,'',null,null,null,null,false);
+    this.activeWorkout = new ActiveWorkout(null,new Workout(null,'','',0,new Category(null,'')),'',null,null,null,null,false);
   }
 
   ngOnInit() {
@@ -49,15 +43,13 @@ export class EndworkoutComponent implements OnInit {
       this.selectedId =  +params['index'];
     });
     this.getActiveWorkout();
-    //this.getArchives();
   }
 
   getActiveWorkout() : void{
     this._workoutService.getActiveWorkout().subscribe((data) => {
         this.activeWorkout = data;
-        //this.workout = this.workouts[this.selectedId];
-        this.activeWorkout.enddate = this.today;
-        this.activeWorkout.endtime = this.today;
+        this.activeWorkout.endDate = this.today;
+        this.activeWorkout.endTime = this.today;
       }
     );
   }
@@ -74,23 +66,12 @@ export class EndworkoutComponent implements OnInit {
   }*/
 
   end() : void {
+    this.startDateFormat();
+    this.startTimeFormat();
+    this.activeWorkout.status = false;
     this._workoutService.endWorkout(this.activeWorkout).subscribe(() => {
       this.router.navigate(['/View']);
     })
-    /*this.archiveObject();
-    this.workout.started = false;
-    this.workout.startdate = null;
-    this.workout.enddate = null;
-    this.workout.starttime = null;
-    this.workout.endtime = null;
-    this.workouts[this.selectedId] = this.workout;
-    this._workoutService.addWorkout(this.workouts).subscribe(() => {
-
-    });
-    this.archives.push(this.archive);
-    this._workoutService.archive(this.archives).subscribe(() => {
-      this.router.navigate(['/View']);
-    });*/
   }
 
   /*archiveObject(): void{
@@ -101,17 +82,31 @@ export class EndworkoutComponent implements OnInit {
     this.archive.calories = ((this.archive.enddate.getTime() -  this.archive.startdate.getTime())/(1000*60))*this.workout.calories;
   }*/
 
+  startTimeFormat():void {
+    let hoursFormat = this.activeWorkout.startTime.toString().substring(0, 2);
+    let minutesFormat = this.activeWorkout.startTime.toString().substring(3, 5);
+    let secondsFormat = this.activeWorkout.startTime.toString().substring(6, 8);
+    this.activeWorkout.startTime = new Date(1970, 0, 1, hoursFormat, minutesFormat, secondsFormat);
+  }
+
+  startDateFormat():void {
+    let yearFormat = this.activeWorkout.startDate.toString().substring(0, 4);
+    let monthFormat = this.activeWorkout.startDate.toString().substring(5, 7);
+    let dateFormat = this.activeWorkout.startDate.toString().substring(8, 10);
+    this.activeWorkout.startDate = new Date(yearFormat,monthFormat-1,dateFormat, 0, 0, 0);
+  }
+
   timereintialize($event):void {
     this.hours = $event.substring(0, 2);
     this.minutes = $event.substring(3, 5);
-    this.activeWorkout.endtime = new Date(1970, 0, 1, this.hours, this.minutes, 0);
+    this.activeWorkout.endTime = new Date(1970, 0, 1, this.hours, this.minutes, 0);
   }
 
   datereintialize($event):void {
     this.year = $event.substring(0, 4);
     this.month = $event.substring(5, 7);
     this.date = $event.substring(8, 10);
-    this.activeWorkout.enddate = new Date(this.year,this.month-1,this.date, 0, 0, 0);
+    this.activeWorkout.endDate = new Date(this.year,this.month-1,this.date, 0, 0, 0);
   }
 }
 

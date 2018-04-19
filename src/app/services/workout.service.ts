@@ -7,7 +7,12 @@ import { ActiveWorkout } from '../model/activeworkout';
 import { Workout } from '../model/workout';
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  headers: new HttpHeaders({
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': 'http://localhost:4200',
+    'Access-Control-Allow-Headers': 'X-Requested-With, Content-Type, Accept, Origin, Authorization',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE'
+  })
 };
 
 const api = {
@@ -36,11 +41,11 @@ export class WorkoutService {
   }*/
 
   getActiveWorkout():Observable<ActiveWorkout>{
-    return this.http.get<ActiveWorkout>(api.url+'active-workout');
+    return this.http.get<ActiveWorkout>(api.url+'active-workout', httpOptions);
   }
 
   getActiveWorkouts():Observable<ActiveWorkout[]>{
-    return this.http.get<ActiveWorkout[]>(api.url+'active-workouts');
+    return this.http.get<ActiveWorkout[]>(api.url+'active-workouts', httpOptions);
   }
 
   startWorkout(activeWorkout:ActiveWorkout):Observable<ActiveWorkout>{
@@ -54,23 +59,23 @@ export class WorkoutService {
   }
 
   getWorkout(id:number):Observable<Workout>{
-    return this.http.get<Workout>(api.url+'workout/'+id);
+    return this.http.get<Workout>(api.url+'workout/'+id, httpOptions);
   }
 
   getWorkouts():Observable<Workout[]>{
-    return this.http.get<Workout[]>(api.url+'workouts');
+    return this.http.get<Workout[]>(api.url+'workouts', httpOptions);
   }
 
   addWorkout(workout: Workout):Observable<Workout>{
-    return this.http.post<Workout[]>(api.url+'workout',workout, httpOptions);
+    return this.http.post<Workout>(api.url+'workout',workout, httpOptions);
   }
 
   editWorkout(workout: Workout):Observable<Workout>{
-    return this.http.put<Workout[]>(api.url+'workout',workout, httpOptions);
+    return this.http.put<Workout>(api.url+'workout',workout, httpOptions);
   }
 
-  deleteWorkout(id: number):Observable<>{
-    return this.http.delete(api.url+'workout/' + id);
+  deleteWorkout(id: number):Observable<any>{
+    return this.http.delete(api.url+'workout/' + id, httpOptions);
   }
 
 }

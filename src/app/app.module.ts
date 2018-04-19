@@ -5,6 +5,7 @@ import { AsyncLocalStorageModule } from 'angular-async-local-storage';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChartModule } from 'angular-highcharts';
 import { HttpClientModule } from '@angular/common/http';
+import { DatePipe } from '@angular/common';
 //import components
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -47,7 +48,7 @@ import { WorkoutFilterPipe } from './pipes/workoutfilter.pipe';
     ChartModule,
     HttpClientModule
   ],
-  providers: [CategoryService, WorkoutService],
+  providers: [CategoryService, WorkoutService, DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

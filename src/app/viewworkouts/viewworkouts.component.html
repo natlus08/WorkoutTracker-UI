@@ -7,7 +7,7 @@
   </div>
 </div>
 
-<div class="view-record" *ngFor="let workout of workouts | workoutfilter : searchText; index as i">
+<div class="view-record" *ngFor="let workout of workouts | workoutfilter : searchText">
   <div class="row">
     <div class="col-12">
       <div class="input-group mb-3">
@@ -17,16 +17,16 @@
   </div>
   <div class="row">
     <div class="col-3">
-      <button class="btn btn-outline-dark btn-block" [routerLink] = "['/Edit',i]">Edit</button>
+      <button class="btn btn-outline-dark btn-block" [routerLink] = "['/Edit',workout.id]">Edit</button>
     </div>
     <div class="col-3">
-      <button class="btn btn-outline-dark btn-block" (click)="removeWorkout(i)" [disabled]="workout.started && workoutInProgress">Delete</button>
+      <button class="btn btn-outline-dark btn-block" (click)="removeWorkout(workout.id)" [disabled]="(activeWorkoutId > 0 && activeWorkoutId === workout.id) && workoutInProgress">Delete</button>
     </div>
     <div class="col-3">
-      <button class="btn btn-outline-dark btn-block" [routerLink] = "['/Start',i]" [disabled]="(!workout.started && workoutInProgress) || (workoutInProgress)">Start</button>
+      <button class="btn btn-outline-dark btn-block" [routerLink] = "['/Start',workout.id]" [disabled]="(!(activeWorkoutId > 0 && activeWorkoutId === workout.id) && workoutInProgress) || (workoutInProgress)">Start</button>
     </div>
     <div class="col-3">
-      <button class="btn btn-outline-dark btn-block" [routerLink] = "['/End',i]" [disabled]="!workout.started">End</button>
+      <button class="btn btn-outline-dark btn-block" [routerLink] = "['/End',workout.id]" [disabled]="!(activeWorkoutId > 0 && activeWorkoutId === workout.id)">End</button>
     </div>
   </div>
 </div>

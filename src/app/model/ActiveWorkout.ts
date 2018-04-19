@@ -1,14 +1,14 @@
-import { Workout } from './model/workout';
+import { Workout } from './workout';
 
 export class ActiveWorkout {
   constructor(
     public id: number,
     public workout: Workout,
     public comment: string,
-    public startdate: Date,
-    public enddate: Date,
-    public starttime: Date,
-    public endtime: Date,
+    public startDate: Date,
+    public endDate: Date,
+    public startTime: Date,
+    public endTime: Date,
     public status: boolean
   ) {  }
 }

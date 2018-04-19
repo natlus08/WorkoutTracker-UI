@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { DatePipe } from '@angular/common';
 
 import { WorkoutService } from '../services/workout.service';
 
 import { ActiveWorkout } from '../model/activeworkout';
+import { Workout } from '../model/workout';
+import { Category } from '../model/category'
 
 @Component({
   selector: 'app-startworkout',
@@ -28,8 +31,8 @@ export class StartworkoutComponent implements OnInit {
 
   private today:Date = new Date();
 
-  constructor(private _workoutService: WorkoutService, private route: ActivatedRoute, private router: Router) {
-    this.activeWorkout =  new ActiveWorkout(null,null,'',null,null,null,null,false);
+  constructor(private _workoutService: WorkoutService, private route: ActivatedRoute, private router: Router, private datePipe: DatePipe) {
+    this.activeWorkout =  new ActiveWorkout(null,new Workout(null,'','',0,new Category(null,'')),'',null,null,null,null,false);
   }
 
   ngOnInit() {
@@ -41,18 +44,15 @@ export class StartworkoutComponent implements OnInit {
 
   prepWorkout() : void{
     this._workoutService.getWorkout(this.selectedId).subscribe((data) => {
-        //this.workout = data;
-        //this.workout = this.workouts[this.selectedId];
         this.activeWorkout.workout = data;
-        this.activeWorkout.startdate = this.today;
-        this.activeWorkout.starttime = this.today;
+        this.activeWorkout.startDate = this.today;
+        this.activeWorkout.startTime = this.today;
       }
     );
   }
 
   start() : void {
     this.activeWorkout.status = true;
-    //this.workouts[this.selectedId] = this.workout;
     this._workoutService.startWorkout(this.activeWorkout).subscribe(() => {
       this.router.navigate(['/View']);
     });
@@ -65,13 +65,13 @@ export class StartworkoutComponent implements OnInit {
   timereintialize($event):void {
     this.hours = $event.substring(0, 2);
     this.minutes = $event.substring(3, 5);
-    this.activeWorkout.starttime = new Date(1970, 0, 1, this.hours, this.minutes, 0);
+    this.activeWorkout.startTime = new Date(1970, 0, 1, this.hours, this.minutes, 0);
   }
 
   datereintialize($event):void {
     this.year = $event.substring(0, 4);
     this.month = $event.substring(5, 7);
     this.date = $event.substring(8, 10);
-    this.activeWorkout.startdate = new Date(this.year,this.month-1,this.date, 0, 0, 0);
+    this.activeWorkout.startDate = new Date(this.year,this.month-1,this.date, 0, 0, 0);
   }
 }

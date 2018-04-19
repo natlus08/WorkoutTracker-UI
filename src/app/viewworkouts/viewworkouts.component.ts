@@ -15,6 +15,8 @@ export class ViewworkoutsComponent implements OnInit {
 
   private workoutInProgress:boolean = false;
 
+  private activeWorkoutId : number = 0;
+
   constructor(private _workoutService: WorkoutService) { }
 
   ngOnInit() {
@@ -26,26 +28,29 @@ export class ViewworkoutsComponent implements OnInit {
   getWorkouts() : void{
     this._workoutService.getWorkouts().subscribe((data) => {
         this.workouts = data;
-        /*this.workouts.forEach(workout => {
-            if(workout.started){
-              this.workoutInProgress = true;
-              return;
-            }
-        });*/
     });
     this._workoutService.getActiveWorkout().subscribe((data) => {
       if(null != data){
         this.workoutInProgress = true;
-        return;
+        this.activeWorkoutId = data.workout.id;
       }
     });
   }
 
   removeWorkout(id:number): void {
-    //this.workouts.splice(index, 1);
     this._workoutService.deleteWorkout(id).subscribe(() => {
-
+      this.workouts.splice(this.getIndex(id), 1);
     });
+  }
+
+  getIndex(id: number) : number {
+    let pos:number = -1;
+    this.workouts.forEach(function(workout, index){
+      if(workout.id === id){
+        pos = index;
+      }
+    });
+    return pos;
   }
 
 }

@@ -30,7 +30,7 @@ export class AddworkoutComponent implements OnInit {
   private categoryAdded:boolean = false;
 
   constructor(private _categoryService: CategoryService, private _workoutService: WorkoutService, private modalService: NgbModal, private router: Router) {
-    this.workout = new Workout(null,'','',0,null);
+    this.workout = new Workout(null,'','',0,new Category(null,''));
   }
 
   ngOnInit() {
@@ -41,6 +41,8 @@ export class AddworkoutComponent implements OnInit {
   getCategories() : void{
     this._categoryService.getCategories().subscribe((data) => {
         this.categories = data;
+        //default the catgeory to the first element
+        this.workout.category = this.categories[0];
       }
     );
   }
@@ -61,8 +63,7 @@ export class AddworkoutComponent implements OnInit {
       }
     });
     if(!this.workoutFound){
-      this.workouts.push(this.workout);
-      this._workoutService.addWorkout(this.workouts).subscribe(() => {
+      this._workoutService.addWorkout(this.workout).subscribe(() => {
         this.router.navigate(['/View']);
       });
     }
@@ -86,19 +87,18 @@ export class AddworkoutComponent implements OnInit {
     this.categoryFound = false;
     this.categoryAdded = false;
     this.categories.forEach(category => {
-      if(category.title.toLowerCase() == this.newCategory.toLowerCase()){
+      if(category.name.toLowerCase() == this.newCategory.toLowerCase()){
         this.categoryFound = true;
         return;
       }
     });
     if(!this.categoryFound){
       let newCategoryObj: Category = new Category(null,this.newCategory);
-      this._categoryService.addCategory(newCategoryObj).subscribe(() => {
+      this._categoryService.addCategory(newCategoryObj).subscribe((data) => {
         this.newCategory = '';
-        this.categories.push(newCategoryObj);
+        this.categories.push(data);
         this.categoryAdded = true;
       });
     }
   }
-
 }
