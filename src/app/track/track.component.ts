@@ -86,9 +86,8 @@ export class TrackComponent implements OnInit {
   calculateWOMinutes(): void{
     var day = this.today.getDay();
     this.activeWorkouts.forEach(activeWorkout => {
-      alert(JSON.stringify(activeWorkout))
-      let minStartDate = new Date(activeWorkout.startDate.getFullYear(), activeWorkout.startDate.getMonth(), activeWorkout.startDate.getDate(),activeWorkout.startTime.getHours(), activeWorkout.startTime.getMinutes(),0);
-      let minEndDate = new Date(activeWorkout.endDate.getFullYear(), activeWorkout.endDate.getMonth(), activeWorkout.endDate.getDate(),activeWorkout.endTime.getHours(), activeWorkout.endTime.getMinutes(),0);
+      let minStartDate = this.combineStartDateTime(activeWorkout);
+      let minEndDate = this.combineEndDateTime(activeWorkout);
       this.days = Math.ceil((Math.abs(this.today.getTime() - minEndDate.getTime())) / (1000 * 3600 * 24));
       this.minutes = Math.ceil((Math.abs(minEndDate.getTime() - minStartDate.getTime())) / (1000 * 60));
       if(this.days == 1){
@@ -106,8 +105,8 @@ export class TrackComponent implements OnInit {
   chartData(): void {
     var day = this.today.getDay();
     this.activeWorkouts.forEach(activeWorkout => {
-      let startDate = new Date(activeWorkout.startDate.getFullYear(), activeWorkout.startDate.getMonth(), activeWorkout.startDate.getDate(),activeWorkout.startTime.getHours(), activeWorkout.startTime.getMinutes(),0);
-      let endDate = new Date(activeWorkout.endDate.getFullYear(), activeWorkout.endDate.getMonth(), activeWorkout.endDate.getDate(),activeWorkout.endTime.getHours(), activeWorkout.endTime.getMinutes(),0);
+      let startDate = this.combineStartDateTime(activeWorkout);
+      let endDate = this.combineEndDateTime(activeWorkout);
       this.days = Math.ceil((Math.abs(this.today.getTime() - endDate.getTime())) / (1000 * 3600 * 24));
       let calories = this.calorieCalculator(activeWorkout);
       if(this.days <= 7 && this.days <= day){
@@ -214,25 +213,19 @@ export class TrackComponent implements OnInit {
   }
 
   calorieCalculator(activeWorkout: ActiveWorkout): number {
-    let calStartDate = new Date();
-    let calEndDate = new Date();
-    calStartDate = new Date(activeWorkout.startDate.getFullYear(), activeWorkout.startDate.getMonth(), activeWorkout.startDate.getDate(),activeWorkout.startTime.getHours(), activeWorkout.startTime.getMinutes(),0);
-    calEndDate = new Date(activeWorkout.endDate.getFullYear(), activeWorkout.endDate.getMonth(), activeWorkout.endDate.getDate(),activeWorkout.endTime.getHours(), activeWorkout.endTime.getMinutes(),0);
+    let calStartDate = this.combineStartDateTime(activeWorkout);
+    let calEndDate = this.combineEndDateTime(activeWorkout);
     return ((calEndDate.getTime() -  calStartDate.getTime())/(1000*60))*activeWorkout.workout.caloriesBurnt;
   }
 
-  timeFormat(date: Date): Date {
-    let hoursFormat = date.toString().substring(0, 2);
-    let minutesFormat = date.toString().substring(3, 5);
-    let secondsFormat = date.toString().substring(6, 8);
-    return new Date(1970, 0, 1, hoursFormat, minutesFormat, secondsFormat);
+  combineStartDateTime(activeWorkout: ActiveWorkout) : Date {
+    return new Date(+activeWorkout.startDate.toString().substring(0, 4), +activeWorkout.startDate.toString().substring(5, 7) - 1, +activeWorkout.startDate.toString().substring(8, 10),
+      +activeWorkout.startTime.toString().substring(0, 2), +activeWorkout.startTime.toString().substring(3, 5), +activeWorkout.startTime.toString().substring(6, 8));
   }
 
-  dateFormat(date: Date): Date {
-    let yearFormat = date.toString().substring(0, 4);
-    let monthFormat = date.toString().substring(5, 7);
-    let dateFormat = date.toString().substring(8, 10);
-    return new Date(yearFormat,monthFormat-1,dateFormat, 0, 0, 0);
+  combineEndDateTime(activeWorkout: ActiveWorkout) : Date {
+    return new Date(+activeWorkout.endDate.toString().substring(0, 4), +activeWorkout.endDate.toString().substring(5, 7) - 1, +activeWorkout.endDate.toString().substring(8, 10),
+      +activeWorkout.endTime.toString().substring(0, 2), +activeWorkout.endTime.toString().substring(3, 5), +activeWorkout.endTime.toString().substring(6, 8));
   }
 
   private weekChart = new Chart({

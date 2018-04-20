@@ -23,6 +23,8 @@ export class StartworkoutComponent implements OnInit {
 
   private minutes:number = 0;
 
+  private seconds:number = 0;
+
   private year:number = 0;
 
   private month:number = 0;
@@ -30,6 +32,8 @@ export class StartworkoutComponent implements OnInit {
   private date:number = 0;
 
   private today:Date = new Date();
+
+  private erroneous: boolean = false;
 
   constructor(private _workoutService: WorkoutService, private route: ActivatedRoute, private router: Router, private datePipe: DatePipe) {
     this.activeWorkout =  new ActiveWorkout(null,new Workout(null,'','',0,new Category(null,'')),'',null,null,null,null,false);
@@ -52,10 +56,20 @@ export class StartworkoutComponent implements OnInit {
   }
 
   start() : void {
-    this.activeWorkout.status = true;
-    this._workoutService.startWorkout(this.activeWorkout).subscribe(() => {
-      this.router.navigate(['/View']);
-    });
+    let startDateTime = this.combineStartDateTime(this.activeWorkout);
+    if(startDateTime > new Date()){
+      this.erroneous = true;
+    }else{
+      this.activeWorkout.status = true;
+      this._workoutService.startWorkout(this.activeWorkout).subscribe(() => {
+        this.router.navigate(['/View']);
+      });
+    }
+  }
+
+  combineStartDateTime(activeWorkout: ActiveWorkout) : Date {
+    return new Date(activeWorkout.startDate.getFullYear(), activeWorkout.startDate.getMonth(), activeWorkout.startDate.getDate(),
+      activeWorkout.startTime.getHours(), +activeWorkout.startTime.getMinutes(), +activeWorkout.startTime.getSeconds());
   }
 
   cancel() : void{
@@ -65,7 +79,8 @@ export class StartworkoutComponent implements OnInit {
   timereintialize($event):void {
     this.hours = $event.substring(0, 2);
     this.minutes = $event.substring(3, 5);
-    this.activeWorkout.startTime = new Date(1970, 0, 1, this.hours, this.minutes, 0);
+    this.seconds = $event.substring(6, 8);
+    this.activeWorkout.startTime = new Date(1970, 0, 1, this.hours, this.minutes, this.seconds);
   }
 
   datereintialize($event):void {
