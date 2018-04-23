@@ -200,22 +200,25 @@ export class TrackComponent implements OnInit {
 
     this.weekChart.addSerie({
       name: 'workouts',
-      data: this.weekChartData
+      data: this.weekChartData,
+      color: 'orange'
     });
     this.monthChart.addSerie({
       name: 'workouts',
-      data: this.monthChartData
+      data: this.monthChartData,
+      color: 'purple'
     });
     this.yearChart.addSerie({
       name: 'workouts',
-      data: this.yearChartData
+      data: this.yearChartData,
+      color: 'green'
     });
   }
 
   calorieCalculator(activeWorkout: ActiveWorkout): number {
     let calStartDate = this.combineStartDateTime(activeWorkout);
     let calEndDate = this.combineEndDateTime(activeWorkout);
-    return ((calEndDate.getTime() -  calStartDate.getTime())/(1000*60))*activeWorkout.workout.caloriesBurnt;
+    return Math.ceil((Math.abs((calEndDate.getTime() - calStartDate.getTime()) / (1000*60))))*activeWorkout.workout.caloriesBurnt;
   }
 
   combineStartDateTime(activeWorkout: ActiveWorkout) : Date {

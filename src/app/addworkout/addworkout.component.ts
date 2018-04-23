@@ -40,16 +40,20 @@ export class AddworkoutComponent implements OnInit {
 
   getCategories() : void{
     this._categoryService.getCategories().subscribe((data) => {
-        this.categories = data;
-        //default the catgeory to the first element
-        this.workout.category = this.categories[0];
+        if( data != null){
+          this.categories = data;
+          //default the catgeory to the first element
+          this.workout.category = this.categories[0];
+        }
       }
     );
   }
 
   getWorkouts() : void{
     this._workoutService.getWorkouts().subscribe((data) => {
-        this.workouts = data;
+        if (data != null) {
+          this.workouts = data;
+        }
       }
     );
   }

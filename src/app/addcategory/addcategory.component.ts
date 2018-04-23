@@ -33,7 +33,9 @@ export class AddcategoryComponent implements OnInit {
 
   getCategories() : void{
     this._categoryService.getCategories().subscribe((data) => {
-        this.categories = data;
+        if(data != null){
+          this.categories = data;
+        }
       }
     );
   }

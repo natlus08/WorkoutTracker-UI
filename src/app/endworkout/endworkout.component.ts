@@ -56,7 +56,8 @@ export class EndworkoutComponent implements OnInit {
 
   end() : void {
     let endDateTime = this.combineEndDateTime(this.activeWorkout);
-    if(endDateTime > new Date()){
+    let startDateTime = this.combineStartDateTime(this.activeWorkout);
+    if(endDateTime > new Date() || endDateTime < startDateTime){
       this.erroneous = true;
     }else{
       this.startDateFormat();
@@ -99,6 +100,11 @@ export class EndworkoutComponent implements OnInit {
   combineEndDateTime(activeWorkout: ActiveWorkout) : Date {
     return new Date(activeWorkout.endDate.getFullYear(), activeWorkout.endDate.getMonth(), activeWorkout.endDate.getDate(),
       activeWorkout.endTime.getHours(), +activeWorkout.endTime.getMinutes(), +activeWorkout.endTime.getSeconds());
+  }
+
+  combineStartDateTime(activeWorkout: ActiveWorkout) : Date {
+    return new Date(+activeWorkout.startDate.toString().substring(0, 4), +activeWorkout.startDate.toString().substring(5, 7) - 1, +activeWorkout.startDate.toString().substring(8, 10),
+      +activeWorkout.startTime.toString().substring(0, 2), +activeWorkout.startTime.toString().substring(3, 5), +activeWorkout.startTime.toString().substring(6, 8));
   }
 }
 
